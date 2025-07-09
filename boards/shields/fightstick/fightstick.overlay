@@ -1,34 +1,64 @@
-#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/matrix_transform.h>
 
 / {
     chosen {
         zmk,kscan = &kscan0;
     };
 
-    /* Define the key matrix for your fightstick */
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-direct";
+        label = "KSCAN";
         
         input-gpios
-            /* 8 action buttons */
-            = <&pro_micro 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // Square
-            , <&pro_micro 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // Triangle
-            , <&pro_micro 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // R1
-            , <&pro_micro 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // L1
-            , <&pro_micro 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // Cross
-            , <&pro_micro 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // Circle
-            , <&pro_micro 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // R2
-            , <&pro_micro 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // L2
-            /* Direction buttons */
-            , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Up
-            , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Down
-            , <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Left
-            , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Right
+            /* Action buttons */
+            = <&pro_micro 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D1 - Square
+            , <&pro_micro 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D0 - Triangle  
+            , <&pro_micro 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D2 - R1
+            , <&pro_micro 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D3 - L1
+            , <&pro_micro 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D4 - Cross
+            , <&pro_micro 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D5 - Circle
+            , <&pro_micro 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D6 - R2
+            , <&pro_micro 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D7 - L2
+            
+            /* D-pad */
+            , <&pro_micro 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D8 - Up
+            , <&pro_micro 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // D9 - Down
+            , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // D10 - Left
+            , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // D16 - Right
+            
             /* System buttons */
-            , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Start
-            , <&pro_micro 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Select
-            , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Home
-            , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Share
+            , <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // D14 - Start
+            , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // D15 - Select
             ;
     };
+
+    /* Analog joystick configuration */
+    anin0: analog_input_0 {
+        compatible = "zmk,analog-input";
+        
+        /* X and Y axis pins - using A0 and A1 */
+        io-channels = <&adc 0>, <&adc 3>;
+        
+        /* Joystick configuration */
+        min-mv = <0>;        // Minimum voltage (0V)
+        max-mv = <3300>;     // Maximum voltage (3.3V)
+        deadzone = <300>;    // Deadzone in mV (adjust as needed)
+        
+        /* Polling rate */
+        poll-period-ms = <8>; // 125Hz polling rate
+        
+        /* Axis inversion if needed */
+        // invert-x;
+        // invert-y;
+    };
+};
+
+/* ADC configuration for nice!nano v2 */
+&adc {
+    status = "okay";
+};
+
+/* Configure the analog pins */
+&gpio0 {
+    status = "okay";
 };

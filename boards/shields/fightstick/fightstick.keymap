@@ -24,12 +24,19 @@
         input-processors = <&zip_fwd_to_hid_io>;
     };
 
+    /* Analog joystick input listener */
+    analog_input_il {
+        compatible = "zmk,input-listener";
+        device = <&anin0>;
+        input-processors = <&zip_fwd_to_hid_io>;
+    };
+
     keymap {
         compatible = "zmk,keymap";
         
         default_layer {
             bindings = <
-                /* Row 1: Action buttons */
+                /* Action buttons */
                 &hidiokp 0   // Square (Button 1)
                 &hidiokp 1   // Triangle (Button 2)
                 &hidiokp 2   // R1 (Button 3)
@@ -39,17 +46,15 @@
                 &hidiokp 6   // R2 (Button 7)
                 &hidiokp 7   // L2 (Button 8)
                 
-                /* Row 2: D-pad - These need special handling */
+                /* D-pad as buttons 12-15 */
                 &hidiokp 12  // Up
                 &hidiokp 13  // Down
                 &hidiokp 14  // Left
                 &hidiokp 15  // Right
                 
-                /* Row 3: System buttons */
+                /* System buttons */
                 &hidiokp 8   // Start (Button 9)
                 &hidiokp 9   // Select (Button 10)
-                &hidiokp 10  // Home (Button 11)
-                &hidiokp 11  // Share (Button 12)
             >;
         };
     };
