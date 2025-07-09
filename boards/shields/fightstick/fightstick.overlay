@@ -7,7 +7,6 @@
 
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-direct";
-        label = "KSCAN";
         
         input-gpios
             /* Action buttons */
@@ -36,29 +35,41 @@
     anin0: analog_input_0 {
         compatible = "zmk,analog-input";
         
-        /* X and Y axis pins - using A0 and A1 */
-        io-channels = <&adc 0>, <&adc 3>;
+        /* Pin configuration for X and Y axes */
+        x-channel = <0>;    // ADC channel 0 (A0/P0.02)
+        y-channel = <3>;    // ADC channel 3 (A1/P0.29)
         
-        /* Joystick configuration */
-        min-mv = <0>;        // Minimum voltage (0V)
-        max-mv = <3300>;     // Maximum voltage (3.3V)
-        deadzone = <300>;    // Deadzone in mV (adjust as needed)
+        /* Voltage range */
+        min-mv = <0>;
+        max-mv = <3300>;
         
-        /* Polling rate */
-        poll-period-ms = <8>; // 125Hz polling rate
-        
-        /* Axis inversion if needed */
-        // invert-x;
-        // invert-y;
+        /* Deadzone and polling */
+        deadzone = <300>;
+        poll-period-ms = <8>;
     };
 };
 
 /* ADC configuration for nice!nano v2 */
 &adc {
     status = "okay";
-};
-
-/* Configure the analog pins */
-&gpio0 {
-    status = "okay";
+    #address-cells = <1>;
+    #size-cells = <0>;
+    
+    channel@0 {
+        reg = <0>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive = <NRF_SAADC_AIN0>; // P0.02
+        zephyr,resolution = <12>;
+    };
+    
+    channel@3 {
+        reg = <3>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive = <NRF_SAADC_AIN3>; // P0.29
+        zephyr,resolution = <12>;
+    };
 };
