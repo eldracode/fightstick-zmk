@@ -1,0 +1,56 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+#define HID_IO_USAGE_FWD_TO_JOYSTICK 2
+
+/ {
+    /* Setup input processor to forward to HID joystick */
+    zip_fwd_to_hid_io: zip_forward_to_hid_io {
+        compatible = "zmk,input-processor-fwd-to-hid-io";
+        #input-processor-cells = <0>;
+        usage = <HID_IO_USAGE_FWD_TO_JOYSTICK>;
+    };
+
+    /* Setup joystick button behavior */
+    hidiokp: hid_io_key_press {
+        compatible = "zmk,behavior-hid-io-key-press";
+        #binding-cells = <1>;
+    };
+
+    /* Input behavior listener for joystick buttons */
+    hidiokp_ibl {
+        compatible = "zmk,input-behavior-listener";
+        device = <&hidiokp>;
+        input-processors = <&zip_fwd_to_hid_io>;
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+        
+        default_layer {
+            bindings = <
+                /* Row 1: Action buttons */
+                &hidiokp 0   // Square (Button 1)
+                &hidiokp 1   // Triangle (Button 2)
+                &hidiokp 2   // R1 (Button 3)
+                &hidiokp 3   // L1 (Button 4)
+                &hidiokp 4   // Cross (Button 5)
+                &hidiokp 5   // Circle (Button 6)
+                &hidiokp 6   // R2 (Button 7)
+                &hidiokp 7   // L2 (Button 8)
+                
+                /* Row 2: D-pad - These need special handling */
+                &hidiokp 12  // Up
+                &hidiokp 13  // Down
+                &hidiokp 14  // Left
+                &hidiokp 15  // Right
+                
+                /* Row 3: System buttons */
+                &hidiokp 8   // Start (Button 9)
+                &hidiokp 9   // Select (Button 10)
+                &hidiokp 10  // Home (Button 11)
+                &hidiokp 11  // Share (Button 12)
+            >;
+        };
+    };
+};

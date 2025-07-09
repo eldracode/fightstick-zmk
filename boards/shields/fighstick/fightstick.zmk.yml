@@ -1,0 +1,10 @@
+file_format: "1"
+id: fightstick
+name: Fightstick
+type: shield
+url: https://github.com/eldracode/fightstick-zmk
+requires: [pro_micro]
+features:
+  - keys
+siblings:
+  - fightstick
