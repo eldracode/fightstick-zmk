@@ -3,9 +3,6 @@ if SHIELD_FIGHTSTICK
 config ZMK_KEYBOARD_NAME
     default "My Fightstick"
 
-config USB_DEVICE_NAME
-    default "My Fightstick"
-
 config USB_DEVICE_PID
     default 0x0001
 
